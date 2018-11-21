@@ -4,35 +4,39 @@
     width: 90%;
     padding: 1em;
     box-sizing: border-box;
-
+    display: grid;
 }
 
-.todoItem_title {
-    margin-top: .1em;
+.todoItem-compleated {
+    background: #d3d3d3;
 }
 
 .todoItem_text {
-    margin-bottom: 1em;
-    transform: translateY(-50px);
-    transition: all 1s;
-    opacity: 0;
-}
-
-.todoItem:hover .todoItem_text {
-    opacity: 1;
-    transform: translateY(0px);
+    margin: .5em 0;
+    animation-duration: .2s;
+    animation-name: slidein;
 }
 
 .todoItem_createdAt {
+    margin-top: 1em;
     color: #d3d3d3;
-}
-
-.todoItem_text,
-.todoItem_title {
-    transition: all .1s;
+    font-size: .6em;
 }
 
 .todoItem_text:hover,
 .todoItem_title:hover {
     border: 1px solid #d3d3d3;
+}
+
+@keyframes slidein {
+    from {
+        margin-top: -1em;
+        opacity: 0;
+    }
+
+    to {
+        margin-top: 0%;
+        opacity: 1;
+    }
+
 }
