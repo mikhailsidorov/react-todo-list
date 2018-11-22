@@ -5,6 +5,7 @@ import { TodoListContext } from '../../contexts'
 import SearchAdd from './SearchAdd/searchAdd'
 import DatePicker from './DatePicker/DatePicker'
 import TodoItem from './TodoItem/TodoItem'
+import StatusPicker from './StatusPicker/StatusPicker'
 import { updateObject } from '../shared/utility'
 import styles from './TodoList.module.css'
 
@@ -35,7 +36,8 @@ class TodoList extends Component {
     ],
     searchString: '',
     firstDate: null,
-    lastDate: null
+    lastDate: null,
+    status: null
   }
 
   switchItemStatus = itemId => {
@@ -103,9 +105,22 @@ class TodoList extends Component {
   }
 
   updateLastDate = newDate => {
-    console.log(newDate)
     this.setState(state => {
       return updateObject(state, { lastDate: new Date(newDate) })
+    })
+  }
+
+  updateStatus = statusData => {
+    this.setState(state => {
+      let status
+      if (statusData.done === true && statusData.notDone === true) {
+        status = null
+      } else if (statusData.done === true) {
+        status = true
+      } else if (statusData.done === false) {
+        status = false
+      }
+      return updateObject(state, { status: status })
     })
   }
 
@@ -132,9 +147,16 @@ class TodoList extends Component {
         }
         return true
       })
+      .filter(item => {
+        if (this.state.status !== null) {
+          return this.state.status === item.isDone
+        }
+        return true
+      })
       .map(item => {
         return <TodoItem data={item} key={item.id} switchItemStatus={this.switchItemStatus} />
       })
+
     return (
       <TodoListContext.Provider
         value={{
@@ -149,6 +171,7 @@ class TodoList extends Component {
         <div className={styles.todoList}>
           <SearchAdd addItem={this.addItem} />
           <DatePicker updateFirstDate={this.updateFirstDate} updateLastDate={this.updateLastDate} />
+          <StatusPicker updateStatus={this.updateStatus} />
           {todoItems}
         </div>
       </TodoListContext.Provider>
