@@ -1,26 +1,46 @@
 import React, { Component } from 'react'
 
+import X from './X/X'
+import TodoTitle from './TodoTitle/TodoTitle'
+import TodoText from './TodoText/TodoText'
 import styles from './TodoItem.module.css'
 
 class TodoItem extends Component {
   state = {
-    cursorOver: false
+    showX: false
+  }
+
+  onclickHandler = () => {
+    this.props.switchItemStatus(this.props.data.id)
+  }
+
+  onMouseEnterHandler = () => {
+    this.setState({ showX: true })
+  }
+
+  onMouseLeaveHandler = () => {
+    this.setState({ showX: false })
   }
 
   render() {
-    const title = !this.props.data.isDone ? (
-      <h3 className={styles.todoItem_title}>{this.props.data.title}</h3>
-    ) : (
-      <del>
-        <h3 className={styles.todoItem_title}>{this.props.data.title}</h3>
-      </del>
-    )
+    const datetime = this.props.data.createdAt
+    const dateString = datetime.getDate() + '-' + (datetime.getMonth() + 1) + '-' + datetime.getFullYear()
+    const currentStyle = this.props.data.isDone
+      ? [styles.todoItem, styles.todoItem_compleated].join(' ')
+      : styles.todoItem
+    const x = this.state.showX ? <X itemId={this.props.data.id} /> : null
 
     return (
-      <div className={styles.todoItem}>
-        {title}
-        <div className={styles.todoItem_text}>{this.props.data.text}</div>
-        <div className={styles.todoItem_createdAt}>{this.props.data.createdAt.toString()}</div>
+      <div
+        className={currentStyle}
+        onClick={this.onclickHandler}
+        onMouseEnter={this.onMouseEnterHandler}
+        onMouseLeave={this.onMouseLeaveHandler}
+      >
+        <TodoTitle title={this.props.data.title} itemId={this.props.data.id} />
+        <TodoText text={this.props.data.text} itemId={this.props.data.id} />
+        <div className={styles.todoItem__createdAt}>{dateString}</div>
+        {x}
       </div>
     )
   }
