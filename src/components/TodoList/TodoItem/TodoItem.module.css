@@ -18,11 +18,6 @@
     text-decoration: line-through;
 }
 
-.todoItem__text {
-    margin: .5em 0;
-    animation-duration: .2s;
-}
-
 .todoItem__createdAt {
     margin-top: 1em;
     color: #d3d3d3;

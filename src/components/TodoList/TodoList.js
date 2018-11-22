@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { v4 as uuid4 } from 'node-uuid'
 
 import { TodoListContext } from '../../contexts'
 import SearchAdd from './SearchAdd/searchAdd'
@@ -30,7 +31,8 @@ class TodoList extends Component {
         isDone: true,
         createdAt: new Date()
       }
-    ]
+    ],
+    searchString: ''
   }
 
   switchItemStatus = itemId => {
@@ -52,14 +54,15 @@ class TodoList extends Component {
     })
   }
 
-  updateTextItem = (itemId, newText, type) => {
+  updateTextItem = (itemId, newTitle, newBody) => {
     this.setState(state => {
       const itemIndex = state.todoItems.findIndex(item => itemId === item.id)
       const updatedProperties = {}
-      if (type === 'title') {
-        updatedProperties.title = newText
-      } else if (type === 'body') {
-        updatedProperties.text = newText
+      if (newTitle != null) {
+        updatedProperties.title = newTitle
+      }
+      if (newBody != null) {
+        updatedProperties.text = newBody
       }
       const updatedItem = updateObject(state.todoItems[itemIndex], updatedProperties)
       const todoItems = [...state.todoItems]
@@ -68,16 +71,52 @@ class TodoList extends Component {
     })
   }
 
-  render() {
-    const todoItems = this.state.todoItems.map(item => {
-      return <TodoItem data={item} key={item.id} switchItemStatus={this.switchItemStatus} />
+  addItem = itemData => {
+    this.setState(state => {
+      const newTodoItems = [
+        {
+          id: uuid4(),
+          title: itemData.title,
+          text: itemData.text,
+          isDone: false,
+          createdAt: new Date()
+        },
+        ...state.todoItems
+      ]
+      return { todoItems: newTodoItems }
     })
+  }
+
+  updateSearchString = newSearchString => {
+    this.setState(state => {
+      return updateObject(state, { searchString: newSearchString })
+    })
+  }
+
+  render() {
+    const todoItems = this.state.todoItems
+      .filter(item => {
+        return item.text
+          .toString()
+          .toUpperCase()
+          .includes(this.state.searchString.toUpperCase())
+      })
+      .map(item => {
+        return <TodoItem data={item} key={item.id} switchItemStatus={this.switchItemStatus} />
+      })
     return (
       <TodoListContext.Provider
-        value={{ todoItems: this.state.todoItems, deleteItem: this.deleteItem, updateTextItem: this.updateTextItem }}
+        value={{
+          todoItems: this.state.todoItems,
+          searchString: this.state.searchString,
+          deleteItem: this.deleteItem,
+          updateTextItem: this.updateTextItem,
+          addItem: this.addItem,
+          updateSearchString: this.updateSearchString
+        }}
       >
         <div className={styles.todoList}>
-          <SearchAdd />
+          <SearchAdd addItem={this.addItem} />
           {todoItems}
         </div>
       </TodoListContext.Provider>

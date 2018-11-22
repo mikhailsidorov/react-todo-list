@@ -1,4 +1,4 @@
-.searchAdd {
+.itemForm_input {
     display: block;
     width: 100%;
     padding: 0;
@@ -12,10 +12,10 @@
     font-size: 1.17em;
 }
 
-.searchAdd:hover {
+.itemForm_input:hover {
     border-color: #000;
 }
 
-.searchAdd:focus {
+.itemForm_input:focus {
     border-color: #000;
 }
