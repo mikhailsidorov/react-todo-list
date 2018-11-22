@@ -1,42 +1,30 @@
 .todoItem {
-    border: 1px solid black;
+    border: 1px solid #d3d3d3;
     margin-top: 1em;
     width: 90%;
-    padding: 1em;
+    padding: 2em 3em;
     box-sizing: border-box;
     display: grid;
+    position: relative;
+    transition: all .2s;
 }
 
-.todoItem-compleated {
-    background: #d3d3d3;
+.todoItem:hover {
+    border: 1px solid #000;
 }
 
-.todoItem_text {
+.todoItem_compleated {
+    background: #f1f1f1;
+    text-decoration: line-through;
+}
+
+.todoItem__text {
     margin: .5em 0;
     animation-duration: .2s;
-    animation-name: slidein;
 }
 
-.todoItem_createdAt {
+.todoItem__createdAt {
     margin-top: 1em;
     color: #d3d3d3;
     font-size: .6em;
-}
-
-.todoItem_text:hover,
-.todoItem_title:hover {
-    border: 1px solid #d3d3d3;
-}
-
-@keyframes slidein {
-    from {
-        margin-top: -1em;
-        opacity: 0;
-    }
-
-    to {
-        margin-top: 0%;
-        opacity: 1;
-    }
-
 }

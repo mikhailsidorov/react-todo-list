@@ -1,0 +1,7 @@
+.editField {
+    background-color: white;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
+    font-size: 1.17em;
+    outline: none;
+}
