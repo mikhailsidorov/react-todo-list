@@ -3,6 +3,7 @@ import { v4 as uuid4 } from 'node-uuid'
 
 import { TodoListContext } from '../../contexts'
 import SearchAdd from './SearchAdd/searchAdd'
+import DatePicker from './DatePicker/DatePicker'
 import TodoItem from './TodoItem/TodoItem'
 import { updateObject } from '../shared/utility'
 import styles from './TodoList.module.css'
@@ -32,7 +33,9 @@ class TodoList extends Component {
         createdAt: new Date()
       }
     ],
-    searchString: ''
+    searchString: '',
+    firstDate: null,
+    lastDate: null
   }
 
   switchItemStatus = itemId => {
@@ -93,6 +96,19 @@ class TodoList extends Component {
     })
   }
 
+  updateFirstDate = newDate => {
+    this.setState(state => {
+      return updateObject(state, { firstDate: new Date(newDate) })
+    })
+  }
+
+  updateLastDate = newDate => {
+    console.log(newDate)
+    this.setState(state => {
+      return updateObject(state, { lastDate: new Date(newDate) })
+    })
+  }
+
   render() {
     const todoItems = this.state.todoItems
       .filter(item => {
@@ -100,6 +116,21 @@ class TodoList extends Component {
           .toString()
           .toUpperCase()
           .includes(this.state.searchString.toUpperCase())
+      })
+      .filter(item => {
+        if (this.state.firstDate) {
+          if (this.state.firstDate) {
+            if (this.state.firstDate.getDate() > item.createdAt.getDate()) {
+              return false
+            }
+          }
+          if (this.state.lastDate) {
+            if (this.state.lastDate.getDate() < item.createdAt.getDate()) {
+              return false
+            }
+          }
+        }
+        return true
       })
       .map(item => {
         return <TodoItem data={item} key={item.id} switchItemStatus={this.switchItemStatus} />
@@ -117,6 +148,7 @@ class TodoList extends Component {
       >
         <div className={styles.todoList}>
           <SearchAdd addItem={this.addItem} />
+          <DatePicker updateFirstDate={this.updateFirstDate} updateLastDate={this.updateLastDate} />
           {todoItems}
         </div>
       </TodoListContext.Provider>

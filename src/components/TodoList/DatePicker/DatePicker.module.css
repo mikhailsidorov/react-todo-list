@@ -1,0 +1,8 @@
+.datePicker {
+    width: 90%;
+    height: 2em;
+    margin-top: 1em;
+    /* border: 1px solid #d3d3d3; */
+    display: grid;
+    grid-auto-flow: column;
+}
