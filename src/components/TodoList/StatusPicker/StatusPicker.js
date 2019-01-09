@@ -11,20 +11,28 @@ class StatusPicker extends Component {
 
   onDoneChangeHandler = event => {
     const status = event.target.checked
-    this.setState(state => {
-      const newState = updateObject(state, { done: status })
-      this.props.updateStatus(newState)
-      return newState
-    })
+    this.setState(
+      prevState => {
+        const newState = updateObject(prevState, { done: status })
+        return newState
+      },
+      newState => {
+        this.props.updateStatus(newState)
+      }
+    )
   }
 
   onNotDoneChangeHandler = event => {
     const status = event.target.checked
-    this.setState(state => {
-      const newState = updateObject(state, { notDone: status })
-      this.props.updateStatus(newState)
-      return newState
-    })
+    this.setState(
+      prevState => {
+        const newState = updateObject(prevState, { notDone: status })
+        return newState
+      },
+      newState => {
+        this.props.updateStatus(newState)
+      }
+    )
   }
 
   render() {
